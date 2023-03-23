@@ -158,24 +158,22 @@ const books_create = (request, h) =>{
   const delete_book = (request, h) => {
   const { bookId } = request.params
 
-  const index = bookselft.findIndex((book) => book.id === bookId)
-
-    if (index !== -1) {
-        bookselft.splice(index, 1)
-
-        const response = h.response({
+  const index = book.findIndex((book) => book.id === bookId)
+    if (index >= 0) {
+        book.splice(index, 1)
+        respond = h.response({
         status: 'success',
-        message: 'Buku berhasil dihapus'
+        message: 'book deleted.'
         })
-        response.code(200)
-        return response
+        respond.code(200)
+        return respond
     }
-    const response = h.response({
-        status: 'fail',
-        message: 'Buku gagal dihapus. Id tidak ditemukan'
+    respond = h.response({
+        status: 'failed',
+        message: 'faild delete book, book not found'
     })
-    response.code(404)
-    return response
+    respond.code(404)
+    return respond
     }
     
 
