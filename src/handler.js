@@ -1,4 +1,4 @@
-const  book  = require('./book');
+const  bookselft  = require('./book');
 const { nanoid } = require('nanoid');
 
 const books_create = (request, h) =>{
@@ -32,34 +32,34 @@ const books_create = (request, h) =>{
     }
     if(name === "" || name == null){
         respond = h.response({
-            "status" : "failed" , 
-            "message" : "Failed to add the book. Please fill in the name of the book."
+            "status" : "fail" , 
+            "message" : "fail to add the book. Please fill in the name of the book."
         })
         respond.code(400)
         return respond;
     }
     if(readPage > pageCount){
          respond = h.response({
-            "status" : "failed" , 
-            "message" : "Failed to add the book. readPage cannot be greater than pageCount."
+            "status" : "fail" , 
+            "message" : "fail to add the book. readPage cannot be greater than pageCount."
         })
         respond.code(400)
         return respond;
     }
-    book.push(new_book);
+    bookselft.push(new_book);
 
-    const success = book.filter(book=>book.id == id).length>0
+    const success = bookselft.filter(bookselft=>bookselft.id == id).length>0
     if(!success){
         respond = h.response({
-            "status" : "failed" , 
-            "message" : "Failed to add the book."
+            "status" : "fail" , 
+            "message" : "failed to add the book."
         })
         respond.code(400)
         return respond
     } else {
         respond = h.response({
             "status" : "success" , 
-            "message" : "Book added successfully.",
+            "message" : "Buku berhasil ditambahkan",
             data:{
                 bookId:id,
             } 
@@ -72,16 +72,23 @@ const books_create = (request, h) =>{
     const all_books = (response, h) =>({
         "status" : "success" , 
         "message" : "Displaying all books.",
-        data:book
+        data:{
+            books: bookselft
+          .map((books) => ({
+            id: books.id,
+            name: books.name,
+            publisher: books.publisher
+          }))
+        }
     })
 
 
     const find_book = (request, h) => {
     const { bookId } = request.params
-    const myBook = book.filter((book) => book.id === bookId)[0]
-    if (!myBook || myBook === null) {
+    const book = bookselft.filter((bookselft) => bookselft.id === bookId)[0]
+    if (!book || book === null) {
         respond = h.response({
-        status: 'failed',
+        status: 'fail',
         message: 'book not found'
     })
     respond.code(404)
@@ -91,7 +98,7 @@ const books_create = (request, h) =>{
         status: 'success',
         message: 'success to find the book',
             data: {
-                myBook
+                book
             }
         }
    
@@ -111,26 +118,26 @@ const books_create = (request, h) =>{
     const isFinished = (readPage, pageCount) => (readPage==pageCount)?true:(readPage<pageCount)?false:null;
     const insertedAt = new Date().toISOString()
     const updatedAt = insertedAt
-    const bookNumber = book.findIndex((book) => book.id === bookId)
+    const bookNumber = bookselft.findIndex((bookselft) => bookselft.id === bookId)
     if(name === "" || name == null){
         respond = h.response({
-            "status" : "failed" , 
-            "message" : "Failed to add the book. Please fill in the name of the book."
+            "status" : "fail" , 
+            "message" : "failed to add the book. Please fill in the name of the book."
         })
         respond.code(400)
         return respond;
     }
     if(readPage > pageCount){
          respond = h.response({
-            "status" : "failed" , 
-            "message" : "Failed to add the book. readPage cannot be greater than pageCount."
+            "status" : "fail" , 
+            "message" : "failed to add the book. readPage cannot be greater than pageCount."
         })
         respond.code(400)
         return respond;
     }
     if (bookNumber >= 0 ) {
-    book[bookNumber] = {
-      ...book[bookNumber],
+    bookselft[bookNumber] = {
+      ...bookselft[bookNumber],
       name,
       year,
       author,
@@ -143,13 +150,13 @@ const books_create = (request, h) =>{
     }
     respond = h.response({
       status: 'success',
-      message: 'book updated'
+      message: 'Buku berhasil diperbarui'
     })
     respond.code(200)
     return respond
     }
     respond = h.response({
-    status: 'failed',
+    status: 'fail',
     message: 'faild to update book, book not found!'
     })
     respond.code(404)
@@ -158,19 +165,19 @@ const books_create = (request, h) =>{
   const delete_book = (request, h) => {
   const { bookId } = request.params
 
-  const index = book.findIndex((book) => book.id === bookId)
+  const index = bookselft.findIndex((bookselft) => bookselft.id === bookId)
     if (index >= 0) {
-        book.splice(index, 1)
+        bookselft.splice(index, 1)
         respond = h.response({
         status: 'success',
-        message: 'book deleted.'
+        message: 'Buku berhasil dihapus'
         })
         respond.code(200)
         return respond
     }
     respond = h.response({
-        status: 'failed',
-        message: 'faild delete book, book not found'
+        status: 'fail',
+        message: 'failed delete book, book not found'
     })
     respond.code(404)
     return respond

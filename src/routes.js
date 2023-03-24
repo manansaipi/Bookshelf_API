@@ -9,7 +9,7 @@ const routes = [
     },
     {
         method:'POST',
-        path:'/book-create',
+        path:'/books',
         handler: books_create
     },
     {
